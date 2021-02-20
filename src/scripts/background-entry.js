@@ -5,9 +5,15 @@ const gh = new GitHub({
 });
 const search = gh.search();
 
-const interactionCache = new Map();
+// can't use sync storage cuz some users have 500K of interaction data...
+const getLocalChromeStorage = promisify(chrome.storage.local.get.bind(chrome.storage.local));
+const setLocalChromeStorage = promisify(chrome.storage.local.set.bind(chrome.storage.local));
+
+
+
 async function getUserInteractions(username) {
-  if (interactionCache.has(username)) return interactionCache.get(username);
+  const res = await getLocalChromeStorage(username)
+  if (res && res[username] && res[username].interactions) return res[username].interactions;
 
   const user = gh.getUser(username);
   const starred = (await user.listStarredRepos()).data.map(repo => {
@@ -39,7 +45,7 @@ async function getUserInteractions(username) {
     issues: [...createdIssues, ...commentedIssues],
   };
 
-  interactionCache.set(username, interactions);
+  await setLocalChromeStorage({[username]: {interactions}})
   return interactions;
 }
 
@@ -76,3 +82,29 @@ async function findCommonInteractions(otherUsername) {
 (async function() {
   console.log('common', await findCommonInteractions('paulirish'));
 })();
+
+
+
+
+function promisify(func) {
+  if (func && typeof func.then === "function") {
+    return func;
+  }
+
+  return function(keys) {
+    return new Promise(function (resolve, reject) {
+      func(keys, function(arg) {
+        let err = chrome.runtime.lastError;
+        if (err) {
+          reject(err);
+        } else {
+          if (arg) {
+            resolve(arg);
+          } else {
+            resolve();
+          }
+        }
+      });
+    });
+  };
+}
