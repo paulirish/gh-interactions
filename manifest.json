@@ -1,9 +1,9 @@
 {
-  "name": "__MSG_appName__",
+  "name": "gh-interactions",
   "version": "1.0.0",
   "minimum_chrome_version": "72",
   "manifest_version": 2,
-  "description": "__MSG_appDescription__",
+  "description": "gh interactions is cool",
   "background": {
     "scripts": [
       "scripts/GitHub.bundle.js",
@@ -13,7 +13,7 @@
   },
   "permissions": [
     "activeTab",
-    "debugger",
+    "unlimitedStorage",
     "storage"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'none'"
