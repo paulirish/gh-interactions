@@ -1,6 +1,6 @@
 // basic auth
 const gh = new GitHub({
-  username: '___USERNAME___',
+  username: 'egsweeny',
   token: '___TOKEN___',
 });
 const search = gh.search();
@@ -80,7 +80,7 @@ async function findCommonInteractions(otherUsername) {
 }
 
 (async function() {
-  console.log('common', await findCommonInteractions('paulirish'));
+  console.log('common', await findCommonInteractions('peixotorms'));
 })();
 
 
