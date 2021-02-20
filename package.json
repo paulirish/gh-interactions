@@ -1,0 +1,9 @@
+{
+  "name": "gh-interactions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "github-api": "^3.2.0"
+  }
+}
